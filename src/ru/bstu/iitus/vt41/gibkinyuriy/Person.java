@@ -5,21 +5,39 @@ import java.util.Scanner;
 /**
  * Created by yuriy on 20.09.2016.
  */
-public abstract class Person {
-    public String Name;
-    public String Member;
-    public int Number;
-    private int Age;
+public class Person implements Comparable {
+    public String Name; //fixme to camelCase
+    public String Member; //fixme
+    public int Number; //fixme
+    private int Age;  //fixme
 
-    public Person(int age, String member) {
-        this.Age = age;
-        this.Member = member;
+    public Person() {
     }
 
-    public abstract void init(Scanner scanner);
+    public void init(Scanner scanner) {
+        Name = Main.readString("Input Name and Surname:");
+        Age = Main.readInt("Input age:");
+    }
 
     public int getAge() {
         return Age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        if (Age != person.Age) return false;
+        return Name != null && Name.equals(person.Name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Name.hashCode();
+        result = 31 * result + Age;
+        return result;
     }
 
     @Override
@@ -27,13 +45,36 @@ public abstract class Person {
         return "Name: " + this.Name + " Age: " + this.Age + " Member: " + this.Member + " Number: " + this.Number;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        return getAge() - ((Person) o).getAge();
+    }
+
+    enum PersonType {
+        TEACHER(1), STUDENT(2);
+
+        int value;
+
+        PersonType(int i) {
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString();
+        }
+    }
+
 
 }
 
 class Student extends Person//класс студент
 {
-    public Student(int age) {
-        super(age, "Student");
+    public Student() {
+        super();
     }
 
     @Override
@@ -46,8 +87,8 @@ class Student extends Person//класс студент
 
 class Schoolkid extends Person//класс Школьники
 {
-    public Schoolkid(int age) {
-        super(age, "Schoolkid");
+    public Schoolkid() {
+        super();
     }
 
     @Override
@@ -59,23 +100,23 @@ class Schoolkid extends Person//класс Школьники
 
 class Cooperator extends Person//класс сотрудники
 {
-    public Cooperator(int age, String member) {
-        super(age, member);
+    public Cooperator() {
     }
 
     @Override
     public void init(Scanner scanner) {
+        super.init(scanner);
     }
 }
 
-class Teacher extends Cooperator//класс учитель
-{
-    public Teacher(int age) {
-        super(age, "Teacher");
+class Teacher extends Cooperator {
+    public Teacher() {
+        super();
     }
 
     @Override
     public void init(Scanner scanner) {
+        super.init(scanner);
         System.out.println("Input number sertificate:");
         this.Number = scanner.nextInt();
     }
@@ -83,8 +124,8 @@ class Teacher extends Cooperator//класс учитель
 
 class Manager extends Cooperator//класс директор
 {
-    public Manager(int age) {
-        super(age, "Manager");
+    public Manager() {
+        super();
     }
 
     @Override
